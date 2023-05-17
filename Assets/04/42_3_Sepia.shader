@@ -41,7 +41,10 @@ Shader "Unlit/42_3_Sepia"
 			fixed4 col = tex2D(_MainTex, i.uv);
 			fixed sepia = 0.1f;
 			fixed grayScale = col.r * 0.299 + col.g * 0.587 + col.b * 0.114;
-			fixed4 gray = fixed4(grayScale + sepia, grayScale, grayScale - sepia, 1);
+			//セピア
+			//fixed4 gray = fixed4(grayScale + sepia, grayScale, grayScale - sepia, 1);
+			//コールド
+			fixed4 gray = fixed4(grayScale - sepia, grayScale, grayScale + sepia, 1);
 			return gray;
 			}
 			ENDCG
