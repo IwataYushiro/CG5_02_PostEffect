@@ -40,7 +40,10 @@ Shader "Unlit/42_5_Mosaic"
 			{
 				// sample the texture
 				float density = 50;
-				fixed4 col = tex2D(_MainTex, floor(i.uv * density) / density);
+				//長方形モザイク
+				//fixed4 col = tex2D(_MainTex, floor(i.uv * density) / density);
+				//正方形モザイク
+				fixed4 col = tex2D(_MainTex, floor(i.uv * _ScreenParams.xy / density) * density / _ScreenParams.xy);
 				return col;
 			}
 			ENDCG
