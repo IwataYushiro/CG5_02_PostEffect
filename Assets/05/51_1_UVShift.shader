@@ -38,8 +38,8 @@ Shader "Unlit/51_1_UVShift"
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				float _ShiftWidth = 0.005;
-			float _ShiftNum = 3;
+			float _ShiftWidth = 0.005;
+			float _ShiftNum = 5;//num x num
 
 			fixed4 col = fixed4(0, 0, 0, 0);
 			float num = 0;
