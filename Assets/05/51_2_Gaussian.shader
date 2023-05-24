@@ -1,4 +1,4 @@
-Shader "Unlit/51_1_UVShift"
+Shader "Unlit/51_2_Gaussian"
 {
 	Properties
 	{
@@ -36,25 +36,34 @@ Shader "Unlit/51_1_UVShift"
 				return o;
 			}
 
+			fixed Gaussian(float2 drawUV, float2 pickUV, float sigma)
+			{
+				float d = distance(drawUV, pickUV);
+				return exp(-(d * d) / (2 * sigma * sigma));
+			}
+			
 			fixed4 frag(v2f i) : SV_Target
 			{
-			float _ShiftWidth = 0.005;
-			float _ShiftNum = 5;//num x num
+				float totalWeight = 0,_Sigma = 0.005,_StepWidth = 0.001;
+			float4 col = fixed4(0, 0, 0, 0);
 
-			fixed4 col = fixed4(0, 0, 0, 0);
-			float num = 0;
-			for (fixed py = -_ShiftNum / 2; py <= _ShiftNum / 2; py++)
+			for (float py = -_Sigma * 2; py <= _Sigma * 2; py += _StepWidth)
 			{
 				//[loop]A[unroll]‚Í‘‚©‚È‚­‚Ä‚¢‚¢
-				for (fixed px = -_ShiftNum / 2; px <= _ShiftNum / 2; px++)
+				for (float px = -_Sigma * 2; px <= _Sigma * 2; px += _StepWidth)
 				{
-					col += tex2D(_MainTex, i.uv + float2(px, py) * _ShiftWidth);
-					num++;
+					float2 pickUV = i.uv + float2(px, py);
+					fixed weight = Gaussian(i.uv, pickUV, _Sigma);
+					col += tex2D(_MainTex, pickUV) * weight;
+					totalWeight += weight;
 				}
+
 			}
-			col.rgb = col.rgb / num;
+			col.rgb = col.rgb / totalWeight;
 				return col;
 			}
+
+
 			ENDCG
 		}
 	}
