@@ -54,12 +54,13 @@ Shader "Unlit/51_2_Gaussian"
 				{
 					float2 pickUV = i.uv + float2(px, py);
 					fixed weight = Gaussian(i.uv, pickUV, _Sigma);
-					col += tex2D(_MainTex, pickUV) * weight;
+					col += saturate(tex2D(_MainTex, pickUV)) * weight;
 					totalWeight += weight;
 				}
 
 			}
 			col.rgb = col.rgb / totalWeight;
+			col.a = 1;
 				return col;
 			}
 
